@@ -9,7 +9,10 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "TruckBase - トラック販売に、売れる仕組みを。",
   description: "トラック販売事業者向けDXサービス。サイト構築・業務効率化・集客支援をワンストップで提供します。",
-    generator: 'v0.dev'
+  icons: {
+    icon: '/truck-logo.svg',
+  },
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({

@@ -282,15 +282,15 @@ export default function Home() {
               </div>
             </div>
           </div>
-          {/* <div className="absolute bottom-0 right-0 hidden w-2/5 translate-y-1/4 md:block">
+          <div className="absolute bottom-1/2 right-0 hidden w-2/5 translate-y-1/2 md:block">
             <Image
-              src="/placeholder.svg?height=600&width=800"
+              src="/top-right.png?height=600&width=800"
               alt="TruckBase管理画面"
               width={800}
               height={600}
               className="rounded-lg shadow-2xl"
             />
-          </div> */}
+          </div>
         </div>
       </section>
 
@@ -804,12 +804,12 @@ export default function Home() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:text-blue-400">
+                  <Link href="/privacy-policy" className="hover:text-blue-400">
                     プライバシーポリシー
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:text-blue-400">
+                  <Link href="/terms" className="hover:text-blue-400">
                     利用規約
                   </Link>
                 </li>
