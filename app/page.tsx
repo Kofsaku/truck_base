@@ -221,10 +221,14 @@ export default function Home() {
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="outline" className="hidden md:flex">
+            {/* <Button variant="outline" className="hidden md:flex">
               資料請求する
-            </Button>
-            <Button>
+            </Button> */}
+            <Button 
+              size="lg" 
+              className="bg-blue-600 text-white hover:bg-blue-700"
+              onClick={scrollToContact}
+            >
               まずは無料相談
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -264,7 +268,7 @@ export default function Home() {
                 className="bg-blue-600 text-white hover:bg-blue-700"
                 onClick={handleAIConsultationClick}
               >
-                AIにTIPsを聞く
+                プロのTIPsを見てみる
               </Button>
             </div>
             <div className="flex items-center gap-4 text-sm">
