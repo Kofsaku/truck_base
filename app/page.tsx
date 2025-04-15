@@ -799,7 +799,7 @@ export default function Home() {
               <h3 className="mb-4 text-lg font-medium text-white">会社情報</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="#" className="hover:text-blue-400">
+                  <Link href="https://www.miitaso.com/about" className="hover:text-blue-400">
                     会社概要
                   </Link>
                 </li>
@@ -817,12 +817,12 @@ export default function Home() {
             </div>
             <div>
               <h3 className="mb-4 text-lg font-medium text-white">お問い合わせ</h3>
-              <address className="not-italic">
-                <p>〒123-4567</p>
-                <p>東京都千代田区〇〇1-2-3</p>
-                <p className="mt-2">TEL: 03-1234-5678</p>
-                <p>Email: info@truckbase.jp</p>
-              </address>
+              <div className="space-y-2">
+                <p className="text-sm text-gray-600">株式会社miitaso</p>
+                <p className="text-sm text-gray-600">〒104-0061 東京都中央区銀座1丁目12番4号N&E BLD.6F</p>
+                <p className="text-sm text-gray-600">TEL: 090-6266-0207</p>
+                <p className="text-sm text-gray-600">Email: info@miitaso.com</p>
+              </div>
             </div>
           </div>
           <div className="mt-8 border-t border-gray-800 pt-8 text-center">
