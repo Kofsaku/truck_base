@@ -17,6 +17,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
+// TIPの型定義
+type TruckTip = {
+  title: string;
+  content: string;
+  category: string;
+  impact: string;
+}
+
 // Service details data
 const serviceDetails = [
   {
@@ -52,7 +60,7 @@ const serviceDetails = [
     description:
       "顧客管理・見積管理・LINE通知など、業務を効率化するツールを提供。属人化を防ぎ、組織的な営業活動を実現します。",
     features: ["顧客情報一元管理", "見積書自動作成", "LINE通知連携", "営業進捗管理"],
-    image: "/tool.png?height=200&width=300",
+    image: "/tool2.png?height=200&width=300",
     fullDescription: `
       <h3 class="text-lg font-semibold mb-4">トラック販売業務を効率化する業務支援ツール</h3>
       <p class="mb-4">トラック販売事業における日々の業務を効率化し、属人化を防ぐための業務支援ツールをご提供します。顧客情報の一元管理から見積書作成、進捗管理まで、販売プロセス全体をデジタル化します。</p>
@@ -108,32 +116,73 @@ const serviceDetails = [
 ]
 
 // トラック販売のTIPデータ
-const truckTips = [
-  "中古トラックの査定では、走行距離だけでなく、エンジンオイルの状態や冷却水の色、排気ガスの色、ブレーキパッドの摩耗具合など、細かい点検項目が重要です。特に、エンジンオイルの色が黒ずんでいる場合は、オイル交換の頻度が少なかった可能性があり、エンジンの寿命に影響を与えている可能性があります。また、冷却水の色が茶色に変色している場合は、ラジエーターの腐食が進んでいる可能性があるため、注意が必要です。",
-  
-  "トラックの需要は季節だけでなく、地域の産業構造によっても大きく変動します。例えば、東北地方では秋から冬にかけての農産物出荷期、関西地方では春先の引っ越しシーズン、九州地方では夏場の観光シーズンなど、地域特有の需要パターンがあります。また、近年ではEC物流の拡大により、年末年始の需要が特に高まっており、この時期の在庫確保が重要になっています。",
-  
-  "トラックの燃費は、荷物の積載量だけでなく、タイヤの空気圧、エアコン使用状況、アイドリング時間、走行ルートの勾配など、様々な要因に影響されます。特に、タイヤの空気圧が適正値より10%低いだけで、燃費が約2%悪化すると言われています。また、エアコン使用時は約10%の燃費悪化が見込まれるため、適切な温度設定と使用タイミングの管理が重要です。",
-  
-  "トラックの定期点検は、法律で定められた項目だけでなく、各メーカーが推奨する独自の点検項目も重要です。特に、エンジン周りの配管やホースの劣化、ブレーキシステムの油圧配管、サスペンションのブッシュ類など、消耗品の状態確認は定期的に行う必要があります。また、最近では、エコカー減税の対象となるため、排ガス性能の維持も重要な点検項目となっています。",
-  
-  "トラックの保険料は、車両重量や用途だけでなく、運転者の年齢や経験年数、事故履歴、車両の安全装備の有無など、様々な要因で決定されます。特に、近年導入された先進安全装備（AEBS、LDWS等）を搭載している車両は、保険料の割引対象となるケースが増えています。また、運行管理システムを導入している事業者向けに、特別割引を設けている保険会社もあります。",
-  
-  "トラックの買取価格は、市場の需給バランスだけでなく、車両の整備履歴、事故履歴、メーカーの生産状況、新車の納期など、様々な要因に影響されます。特に、メーカーが特定の車種の生産を終了した場合や、新車の納期が長期化している場合、中古車の価格が上昇する傾向にあります。また、環境規制の強化により、特定の排ガス規制を満たさない車両の価値が急落するケースもあります。",
-  
-  "トラックのリース契約は、事業者の資金繰りだけでなく、車両の使用年数、走行距離、メンテナンスコスト、残存価値など、総合的な視点で検討する必要があります。特に、近年では、EVトラックの導入が進んでおり、バッテリーの劣化や充電インフラの整備状況を考慮したリースプランの選択が重要になっています。また、リース期間中の技術革新を考慮し、柔軟な契約内容を検討することも有効です。",
-  
-  "トラックの運転には、免許の種類だけでなく、荷物の積載方法、重量配分、重心位置の計算など、専門的な知識が必要です。特に、積載物の重心が高くなると、横転のリスクが高まるため、適切な積載方法の指導が重要です。また、近年では、運転支援システムの普及により、これらのシステムを適切に活用するための教育も必要になっています。",
-  
-  "トラックの積載量は、車両の種類と道路法規だけでなく、積載物の種類、形状、重心位置など、様々な要因で決定されます。特に、液体や粉体を運搬する場合、走行中の揺れによる重心移動を考慮する必要があります。また、積載物の固定方法も重要で、適切な固定がされていない場合、走行中の事故につながる可能性があります。",
-  
-  "トラックの燃費向上には、定期的なメンテナンスだけでなく、運転者の運転技術、運行管理システムの活用、車両の軽量化など、総合的なアプローチが必要です。特に、アイドリングストップ機能の活用、エコドライブの実践、適切なギアチェンジのタイミングなど、運転者の意識改革が重要です。また、近年では、AIを活用した最適ルート提案や、車両間通信による渋滞回避など、新しい技術の活用も効果的です。"
+const truckTips: TruckTip[] = [
+  {
+    title: "在庫車両ページの効果的な見せ方",
+    content: "「このトラックは◯◯工事で活躍しています」といった具体的な使用事例を記載することで、購入者の安心感を高めます。BtoBでは「機能」より「用途の適合性」が決め手になりやすいため、実際の利用シーンをイメージできる情報が重要です。",
+    category: "販売促進",
+    impact: "成約率向上"
+  },
+  {
+    title: "問い合わせフォームの最適化",
+    content: "用途（建設・運送・農業など）を選ばせるチェック項目を追加することで、用途に合った提案やアップセル（荷台サイズ変更、ナビ付きなど）がしやすくなります。相手の課題に合わせた提案が可能になり、商談の質と成約率が向上します。",
+    category: "営業効率化",
+    impact: "商談品質向上"
+  },
+  {
+    title: "LINE公式アカウントの活用",
+    content: "入荷情報や値下げ情報を画像付きで週1配信することで、メールと比べて2〜3倍の開封率を実現できます。スマホで即見られる特性を活かし、「今すぐ買いたい」層にリアルタイムでアプローチできます。",
+    category: "集客",
+    impact: "問い合わせ増加"
+  },
+  {
+    title: "商談中・成約済トラックの活用",
+    content: "「このトラックは販売済」と表示しつつ、似た車両へのリンクを設置することで、希少性の原理を活用できます。欲しかった車が「売れてしまった」という心理が「早く買おう」という行動に変わります。",
+    category: "販売促進",
+    impact: "成約スピード向上"
+  },
+  {
+    title: "納期表示の重要性",
+    content: "各車両ページに「今なら最短○日で納車」と記載することで、買い手の「いつ使えるか」という関心に応えます。特に急ぎで探している業者には大きなアピールポイントとなり、成約の決め手になります。",
+    category: "販売促進",
+    impact: "成約率向上"
+  },
+  {
+    title: "閲覧履歴を活用した営業",
+    content: "どの車種を何回見たか、閲覧ログをもとに見込み度をランク化することで、検討度が高いユーザーを優先フォローできます。「ご覧になっていた〇〇について…」と切り出すことで、より良い反応が得られます。",
+    category: "営業効率化",
+    impact: "営業効率向上"
+  },
+  {
+    title: "動画コンテンツの活用",
+    content: "走行中の動画、エンジン音、ウィンカー点灯などをYouTubeで紹介することで、「音や動き」で安心感を与えられます。静止画より信頼性がアップし、遠方・海外ユーザーにもアピール可能です。",
+    category: "集客",
+    impact: "信頼性向上"
+  },
+  {
+    title: "オンライン審査の導入",
+    content: "購入ページからローン仮審査ができる仕組みを導入することで、商談スピードが早まります。「審査次第で購入検討中」という層を確実に取り込め、フォーム入力のみで仮審査できることでハードルが下がります。",
+    category: "営業効率化",
+    impact: "成約スピード向上"
+  },
+  {
+    title: "Instagramでの差別化",
+    content: "車内、タイヤ、下回り、ライトなど「普通は見せない部分」を投稿することで、マニア層や整備に詳しい業者に「信頼できる販売者」と認識されやすくなります。ファン化につながり、リピート率が向上します。",
+    category: "集客",
+    impact: "信頼性向上"
+  },
+  {
+    title: "ターゲティング広告の活用",
+    content: "「福岡県の建設業者」などピンポイントに広告出稿することで、広告コストを抑えつつ、成約見込みの高い層にリーチできます。特に地方の中小業者には効果が高く、ROIの向上が期待できます。",
+    category: "集客",
+    impact: "広告効果向上"
+  }
 ]
 
 export default function Home() {
   const [openServiceId, setOpenServiceId] = useState<string | null>(null)
   const [isAIConsultationOpen, setIsAIConsultationOpen] = useState(false)
-  const [randomTip, setRandomTip] = useState("")
+  const [randomTip, setRandomTip] = useState<TruckTip | null>(null)
 
   const handleAIConsultationClick = () => {
     const randomIndex = Math.floor(Math.random() * truckTips.length)
@@ -204,7 +253,7 @@ export default function Home() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                className="border-blue-600 text-blue-600 hover:bg-blue-50 font-bold"
                 onClick={scrollToContact}
               >
                 担当に相談してみる
@@ -215,7 +264,7 @@ export default function Home() {
                 className="bg-blue-600 text-white hover:bg-blue-700"
                 onClick={handleAIConsultationClick}
               >
-                AIに相談してみる
+                AIにTIPsを聞く
               </Button>
             </div>
             <div className="flex items-center gap-4 text-sm">
@@ -636,15 +685,6 @@ export default function Home() {
           <div className="mx-auto max-w-4xl rounded-2xl bg-blue-900 p-8 text-center text-white shadow-xl md:p-12">
             <h2 className="text-3xl font-bold md:text-4xl">まずは無料でご相談ください</h2>
             <p className="mt-4 text-lg text-blue-200">トラック販売業務の効率化についてお気軽にご相談ください</p>
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
-                相談してみる
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-blue-800">
-                資料を請求する
-              </Button>
-            </div>
             <div className="mx-auto mt-12 max-w-md rounded-lg bg-white p-6 shadow-lg">
               <h3 className="mb-4 text-xl font-bold text-gray-900">お問い合わせフォーム</h3>
               <form className="space-y-4">
@@ -694,7 +734,10 @@ export default function Home() {
                     placeholder="ご相談内容をご記入ください"
                   ></textarea>
                 </div>
-                <Button type="submit" className="w-full">
+                <Button 
+                  type="submit" 
+                  className="w-full bg-blue-600 text-white hover:bg-blue-700"
+                >
                   送信する
                 </Button>
               </form>
@@ -705,7 +748,9 @@ export default function Home() {
 
       {/* Fixed CTA Button (Mobile) */}
       <div className="fixed bottom-0 left-0 z-40 w-full border-t bg-white p-4 md:hidden">
-        <Button className="w-full">
+        <Button 
+          className="w-full bg-blue-600 text-white hover:bg-blue-700"
+        >
           まずは無料相談
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
@@ -784,15 +829,28 @@ export default function Home() {
 
       {/* AI Consultation Modal */}
       <Dialog open={isAIConsultationOpen} onOpenChange={setIsAIConsultationOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>トラック販売のTIP</DialogTitle>
+            <DialogTitle className="text-2xl">トラック販売のプロフェッショナルTIPS</DialogTitle>
             <DialogDescription>
-              トラック販売に関する役立つ情報をお届けします
+              実践的な販売・営業・集客のノウハウをお届けします
             </DialogDescription>
           </DialogHeader>
-          <div className="mt-4">
-            <p className="text-gray-700">{randomTip}</p>
+          <div className="mt-4 space-y-4">
+            {randomTip && (
+              <div className="rounded-lg bg-blue-50 p-4">
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
+                    {randomTip.category}
+                  </span>
+                  <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
+                    {randomTip.impact}
+                  </span>
+                </div>
+                <h3 className="mt-3 text-lg font-semibold text-gray-900">{randomTip.title}</h3>
+                <p className="mt-2 text-gray-700">{randomTip.content}</p>
+              </div>
+            )}
           </div>
           <div className="mt-6 flex justify-end">
             <Button onClick={() => setIsAIConsultationOpen(false)}>閉じる</Button>
