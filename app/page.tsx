@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, memo } from "react"
 import { ArrowRight, CheckCircle, MessageSquare, Phone, Truck } from "lucide-react"
 import { toast } from 'sonner'
 
@@ -179,6 +179,46 @@ const truckTips: TruckTip[] = [
     impact: "広告効果向上"
   }
 ]
+
+const ServiceCard = memo(({ service, onOpen }: { service: typeof serviceDetails[0], onOpen: (id: string) => void }) => {
+  return (
+    <Card className="overflow-hidden">
+      <div className="relative h-48">
+        <Image
+          src={service.image}
+          alt={service.title}
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
+      <CardHeader>
+        <CardTitle>{service.title}</CardTitle>
+        <CardDescription>{service.description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ul className="space-y-2">
+          {service.features.map((feature, index) => (
+            <li key={index} className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+        <Button 
+          className="mt-4 w-full" 
+          variant="outline"
+          onClick={() => onOpen(service.id)}
+        >
+          詳細を見る
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </CardContent>
+    </Card>
+  )
+})
+
+ServiceCard.displayName = "ServiceCard"
 
 export default function Home() {
   const [openServiceId, setOpenServiceId] = useState<string | null>(null)
@@ -406,66 +446,12 @@ export default function Home() {
             <p className="mt-4 text-lg text-gray-600">トラック販売に特化した3つのサービスをワンストップで提供します</p>
           </div>
           <div className="mt-16 grid gap-12 md:grid-cols-3">
-            {serviceDetails.map((service, index) => (
-              <div key={index} className="flex flex-col rounded-lg border bg-white p-6 shadow-lg">
-                <div className="mb-6 overflow-hidden rounded-lg">
-                  <Image
-                    src={service.image || "/placeholder.svg"}
-                    alt={service.title}
-                    width={300}
-                    height={200}
-                    className="w-full object-cover transition-transform hover:scale-105"
-                  />
-                </div>
-                <h3 className="mb-4 text-2xl font-bold">{service.title}</h3>
-                <p className="mb-6 text-gray-600">{service.description}</p>
-                <ul className="mb-6 space-y-2">
-                  {service.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Dialog
-                  open={openServiceId === service.id}
-                  onOpenChange={(open) => {
-                    if (open) {
-                      setOpenServiceId(service.id)
-                    } else {
-                      setOpenServiceId(null)
-                    }
-                  }}
-                >
-                  <DialogTrigger asChild>
-                    <Button className="mt-auto" variant="outline">
-                      詳細を見る
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl">{service.title}</DialogTitle>
-                      <DialogDescription>トラック販売事業者様向けサービスの詳細情報</DialogDescription>
-                    </DialogHeader>
-                    <div className="mt-4">
-                      <div className="overflow-hidden rounded-lg mb-6">
-                        <Image
-                          src={service.image || "/placeholder.svg"}
-                          alt={service.title}
-                          width={300}
-                          height={200}
-                          className="w-full object-cover"
-                        />
-                      </div>
-                      <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: service.fullDescription }} />
-                    </div>
-                    <div className="mt-6 flex justify-end">
-                      <Button onClick={() => setOpenServiceId(null)}>閉じる</Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
+            {serviceDetails.map((service) => (
+              <ServiceCard 
+                key={service.id} 
+                service={service} 
+                onOpen={setOpenServiceId}
+              />
             ))}
           </div>
         </div>
@@ -961,6 +947,44 @@ export default function Home() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Service Details Dialog */}
+      {serviceDetails.map((service) => (
+        <Dialog
+          key={service.id}
+          open={openServiceId === service.id}
+          onOpenChange={(open) => {
+            if (open) {
+              setOpenServiceId(service.id)
+            } else {
+              setOpenServiceId(null)
+            }
+          }}
+        >
+          <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">{service.title}</DialogTitle>
+              <DialogDescription>トラック販売事業者様向けサービスの詳細情報</DialogDescription>
+            </DialogHeader>
+            <div className="mt-4">
+              <div className="overflow-hidden rounded-lg mb-6">
+                <Image
+                  src={service.image}
+                  alt={service.title}
+                  width={300}
+                  height={200}
+                  priority
+                  className="rounded-lg"
+                />
+              </div>
+              <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: service.fullDescription }} />
+            </div>
+            <div className="mt-6 flex justify-end">
+              <Button onClick={() => setOpenServiceId(null)}>閉じる</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      ))}
     </div>
   )
 }
