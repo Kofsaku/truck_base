@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { ArrowRight, CheckCircle, MessageSquare, Phone, Truck } from "lucide-react"
+import { toast } from 'sonner'
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -183,6 +184,13 @@ export default function Home() {
   const [openServiceId, setOpenServiceId] = useState<string | null>(null)
   const [isAIConsultationOpen, setIsAIConsultationOpen] = useState(false)
   const [randomTip, setRandomTip] = useState<TruckTip | null>(null)
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+  const [name, setName] = useState('')
+  const [company, setCompany] = useState('')
+  const [phone, setPhone] = useState('')
+  const [service, setService] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleAIConsultationClick = () => {
     const randomIndex = Math.floor(Math.random() * truckTips.length)
@@ -194,6 +202,58 @@ export default function Home() {
     const contactSection = document.getElementById("contact")
     if (contactSection) {
       contactSection.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name || '未入力',
+          company: company || '未入力',
+          email: email || '未入力',
+          phone: phone || '未入力',
+          service: service || '未選択',
+          message: message || '未入力',
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'メールの送信に失敗しました')
+      }
+
+      toast.success('お問い合わせありがとうございます。担当者より3日以内にご連絡させていただきます。', {
+        duration: 5000,
+        position: 'top-center',
+      })
+      setEmail('')
+      setMessage('')
+      setName('')
+      setCompany('')
+      setPhone('')
+      setService('')
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message, {
+          duration: 5000,
+          position: 'top-center',
+        })
+      } else {
+        toast.error('エラーが発生しました。もう一度お試しください。', {
+          duration: 5000,
+          position: 'top-center',
+        })
+      }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -691,7 +751,7 @@ export default function Home() {
             <p className="mt-4 text-lg text-blue-200">トラック販売業務の効率化についてお気軽にご相談ください</p>
             <div className="mx-auto mt-12 max-w-md rounded-lg bg-white p-6 shadow-lg">
               <h3 className="mb-4 text-xl font-bold text-gray-900">お問い合わせフォーム</h3>
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <label htmlFor="name" className="mb-1 block text-sm font-medium text-gray-700">
@@ -702,6 +762,8 @@ export default function Home() {
                       id="name"
                       className="w-full rounded-md border border-gray-300 p-2 text-gray-900"
                       placeholder="山田 太郎"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                     />
                   </div>
                   <div>
@@ -713,6 +775,8 @@ export default function Home() {
                       id="company"
                       className="w-full rounded-md border border-gray-300 p-2 text-gray-900"
                       placeholder="株式会社〇〇"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
                     />
                   </div>
                 </div>
@@ -725,7 +789,39 @@ export default function Home() {
                     id="email"
                     className="w-full rounded-md border border-gray-300 p-2 text-gray-900"
                     placeholder="example@company.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="mb-1 block text-sm font-medium text-gray-700">
+                    電話番号
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    className="w-full rounded-md border border-gray-300 p-2 text-gray-900"
+                    placeholder="090-1234-5678"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="service" className="mb-1 block text-sm font-medium text-gray-700">
+                    ご希望のサービス
+                  </label>
+                  <select
+                    id="service"
+                    className="w-full rounded-md border border-gray-300 p-2 text-gray-900"
+                    value={service}
+                    onChange={(e) => setService(e.target.value)}
+                  >
+                    <option value="">選択してください</option>
+                    <option value="販売サイト構築">販売サイト構築</option>
+                    <option value="業務効率化ツール">業務効率化ツール</option>
+                    <option value="広告/SNS運用支援">広告/SNS運用支援</option>
+                  </select>
                 </div>
                 <div>
                   <label htmlFor="message" className="mb-1 block text-sm font-medium text-gray-700">
@@ -736,13 +832,17 @@ export default function Home() {
                     rows={4}
                     className="w-full rounded-md border border-gray-300 p-2 text-gray-900"
                     placeholder="ご相談内容をご記入ください"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
                   ></textarea>
                 </div>
                 <Button 
                   type="submit" 
                   className="w-full bg-blue-600 text-white hover:bg-blue-700"
+                  disabled={isLoading}
                 >
-                  送信する
+                  {isLoading ? '送信中...' : '送信する'}
                 </Button>
               </form>
             </div>
